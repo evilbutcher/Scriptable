@@ -91,7 +91,7 @@ const getFile = async ({moduleName, url}) => {
 // icon-color: deep-gray; icon-glyph: file-code;\n`;
   const content = await getStr({url})
   const fileHeader = content.includes('icon-color') ? `` : header
-  writeFile(`${moduleName}`, `${fileHeader}${content}`)
+  write(`${moduleName}`, `${fileHeader}${content}`)
   log(`文件下载完成: 🌚 ${moduleName}`)
 }
 
@@ -120,7 +120,7 @@ const require = ({
  * @param {*} fileName 要写入的文件名，默认JS文件，可选其他，加上文件名后缀即可
  * @param {*} content 要写入的文件内容
  */
-const writeFile = (fileName, content) => {
+const write = (fileName, content) => {
   let file = initFile(fileName)
   const filePath = `${dict}/${file}`
   FileManager.iCloud().writeString(filePath, content)
@@ -148,7 +148,7 @@ const initFile = (fileName) => {
  * @param {*} fileName 要读取的文件名，默认JS文件，可选其他，加上文件名后缀即可
  * @return 返回文件内容，字符串形式
  */
-const readFile = (fileName) => {
+const read = (fileName) => {
   const file = initFile(fileName)
   return FileManager.iCloud().readString(`${dict}/${file}`)
 }
@@ -170,6 +170,24 @@ const msg = (title, message, btnMes = 'Cancel') => {
   }
 }
 
+const setdata = (Val, Key) => {
+  Keychain.set(Val, Key)
+  return true
+}
+
+const getdata = (Key) => {
+  return Keychain.get(Key)
+}
+
+const hasdata = (Key) => {
+  return Keychain.contains(Key)
+}
+
+const rmdata = (Key) => {
+  Keychain.remove(Key)
+  return true
+}
+
 const logErr = (e, messsage) => {
   console.error(e)
 }
@@ -182,10 +200,14 @@ module.exports = {
   _post,
   getFile,
   require,
-  writeFile,
+  write,
   isFileExists,
   initFile,
-  readFile,
+  read,
+  setdata,
+  getdata,
+  hasdata,
+  rmdata,
   msg,
   logErr
 }
